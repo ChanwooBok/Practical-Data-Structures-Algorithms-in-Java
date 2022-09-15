@@ -17,7 +17,7 @@ public class Queue {
 	public void insert(long j) {
 		if(rear == maxSize -1) {
 			rear = -1;
-		} // circular queue -> overwriting
+		} // circular queue -> overwriting	
 		rear++;
 		queArray[rear] = j;
 		nItems++;
