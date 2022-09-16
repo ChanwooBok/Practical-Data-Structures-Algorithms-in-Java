@@ -12,9 +12,8 @@ public class LinkedListApp {
 		numbers.addLast(30);
 		numbers.addLast(30);
 		*/
-		System.out.println(numbers.node(0));
-		numbers.add(1, 100);		
-		System.out.println(numbers.node(1)); 
+		numbers.indexOf(10);
+		System.out.println(numbers.indexOf(120));
 	}
 
 }
