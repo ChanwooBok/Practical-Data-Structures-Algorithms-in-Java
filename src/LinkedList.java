@@ -89,12 +89,12 @@ public class LinkedList {
 		if( k == 0 ) {
 			return removeFirst();
 		}
-		Node temp = node(k-1);
+		Node temp = node(k-1); //노드를 제거하려면 그 전 노드를 반드시 알아야한다. ->모든 노드는 링크되어있기때문에..
 		Node todoDeleted = temp.next;
 		temp.next = temp.next.next;
 		Object returnData =  todoDeleted.data;
 		if(todoDeleted == tail) {
-			tail = temp;
+			tail = temp; // 삭제하려는 노드가 tail 이면 temp로 설정한다. 
 		}
 		todoDeleted = null;
 		size--;
@@ -117,7 +117,6 @@ public class LinkedList {
 		
 		Node temp = head;
 		int index = 0 ;
-		
 		while(temp.next != null) {
 			temp = temp.next;
 			index++;
