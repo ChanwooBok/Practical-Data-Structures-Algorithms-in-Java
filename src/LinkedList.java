@@ -126,7 +126,29 @@ public class LinkedList {
 		}
 		return index;
 	}
-	
+	public ListIterator listIterator() {
+		return new ListIterator();
+	}
+	class ListIterator{
+		private Node next;
+		private Node lastReturned;
+		private int nextIndex;
+		
+		ListIterator(){
+			next = head;
+		}
+		
+		public Object next() {
+			lastReturned = next;
+			next = next.next;
+			nextIndex++;
+			return lastReturned.data;
+		}
+		// singly linkedList 에서는 previous와 같은 기능 구현이 불가능하다. 왜냐하면, next로 다음노드는 알 수 있지만 앞 노드는 알 방법이 없기 때문.
+		public boolean hasNext() {
+			return nextIndex < size();
+		}
+	}
 	
 	
 	

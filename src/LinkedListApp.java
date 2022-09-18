@@ -12,8 +12,11 @@ public class LinkedListApp {
 		numbers.addLast(30);
 		numbers.addLast(30);
 		*/
-		numbers.indexOf(10);
-		System.out.println(numbers.indexOf(120));
+		LinkedList.ListIterator i = numbers.listIterator();
+		while( i.hasNext()) {
+			System.out.println(i.next());
+		}
+		
 	}
 
 }
