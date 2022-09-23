@@ -97,14 +97,14 @@ public class DoublyLinkedList {
 		return str+"]";
 	}
 	
-	public Object removeFirst() {
+	public Object removeFirst() { 
 		Node temp = head;
 		head = head.next;
+		Object returnData = temp.data;
+		temp = null;
 		if(head != null){ // 노드가 1개만 존재할시에는 head = head.next 에서 head.next가 null이므로 head가 null이 될 가능성이 있으므로 체크해준다.
 			head.prev = null; //  prev 끊어주기. 
 		}
-		Object returnData = temp.data;
-		temp = null;
 		size--;
 		return returnData;
 	}
@@ -171,32 +171,76 @@ public class DoublyLinkedList {
 			nextIndex++; // next()를 수행한 횟수 -> hasNext()구현을 위해 세어줘 한다.
 			return lastReturned.data;
 		}
-		// singly linkedList 에서는 previous와 같은 기능 구현이 불가능하다. 왜냐하면, next로 다음노드는 알 수 있지만 앞 노드는 알 방법이 없기 때문.
+		
+		public boolean hasPrevious() {
+			return nextIndex > 0; // 맨  처음 노드에 도달할 시 nextIndex는 도로 0이 되기때문에 여기서 더 뒤로 갈 수 없다.
+		}
+		public Object previous() {
+			if( next == null) {
+				lastReturned  = next = tail; // next가 null이면 끝에 다다랐다는 뜻이고 lastReturned 는 맨 끝 노드를 반환한다
+			} else {
+				lastReturned = next = next.prev;
+			}
+			nextIndex--; // prev할때마다 하나씩 줄여줘야 한다.
+			return lastReturned.data;
+		}
+		
+		
 		public boolean hasNext() {
 			return nextIndex < size(); // nextIndex=size()  인 경우에는 next=null이다.
 		}
 		public void add(Object input) {
 			Node newNode = new Node(input);
-			//first input
+			
 			
 			// 맨 처음 add 와 중간에 add 하는것을 구분해주어야 한다. 
-			// 어떻게? lastReturned의 값의 존재유무로 해주겠다. ( 있다는것은 next()를 수행했다는것 -> 중간이란뜻, 없다면 next()를 한번도 수행하지 않았다는것-> 맨 처음이란뜻 )
-			if(lastReturned == null) {
+			// 어떻게? lastReturned의 값의 존재유무로 해주겠다. ( 있다는것은 next()를 수행했다는것 -> 중간이란뜻, 없다면 즉, null이라면, next()를 한번도 수행하지 않았다는것-> 맨 처음이란뜻 )
+			if(lastReturned == null) { //next()실행 하지 않은 상태. 첫번째노드를 아직 리턴하지 않은상태.
 				head = newNode;
 				newNode.next = next;
 			}else if(lastReturned != null) {
 				lastReturned.next = newNode;
-				newNode.next = next.next;
+				newNode.prev = lastReturned;
+				if(next != null) { // 
+					newNode.next = next;
+					next.prev = newNode;
+				}else { // next =null이면 newNode가 마지막이 된다는의미.
+					tail = newNode;
+				}
 			}
+	
 			lastReturned = newNode; // 항상 새로 넣은 노드를 할당하기.
 			nextIndex++; //새로운 노드가 앞이든 뒤든 추가 될 때마다 더해주기.
 			size++;
 		}
 		public void remove() {
-			if(nextIndex == 0 ) {
+			if(nextIndex == 0 ) { // remove()는 next()를 한번이라도 수행한상태에서 동작. 즉, lastReturned != null이며 nextIndex >0 이어야 한다.
 				throw new IllegalStateException();
 			}
-			DoublyLinkedList.this.remove(nextIndex-1); // 지우고자 하는 타겟은 lastReturned 노드이다. ( 선택된 노드 )
+			Node n = lastReturned.next;
+			Node p = lastReturned.prev;
+			
+			if(p==null) {
+				head = n;
+				head.prev = null;
+				lastReturned = null;
+			}else {
+				p.next = next;
+				lastReturned.prev = null;
+			}
+			if( n ==null) {
+				tail = p;
+				tail.next = null;
+			}else {
+				n.prev = p;
+			}
+			
+			if(next ==null) {
+				lastReturned = tail;
+			}else {
+				lastReturned = next.prev;
+			}
+			size--;
 			nextIndex--;
 		}
 	}
